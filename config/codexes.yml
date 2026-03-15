@@ -19,13 +19,106 @@ codexes:
       model_name: "gemini-3.1-flash-lite-preview"
       cooldown_seconds: 1.2
 
-  # Template for future codexes
+  # =========================================================================
+  # PLANNED CODEXES (Templates - uncomment and configure to enable)
+  # =========================================================================
+
+  # OpenAI (GPT-4o, o3, o4-mini)
+  # Priority: HIGH | Status: Planned
+  # Cost: ~$5-15/1M tokens | Free tier: No
   # openai:
   #   enabled: false
   #   class: OpenAICodex
   #   config:
   #     api_key: "${OPENAI_API_KEY}"
-  #     model_name: "gpt-4o"
+  #     model_name: "gpt-4o"  # Options: gpt-4o, o3, o4-mini
+  #     organization: "${OPENAI_ORG_ID}"  # Optional
+
+  # DeepSeek (V3.2, R1)
+  # Priority: HIGH | Status: Planned
+  # Cost: $0.27/1M tokens (cheapest!) | Free tier: Yes (limited)
+  # deepseek:
+  #   enabled: false
+  #   class: DeepSeekCodex
+  #   config:
+  #     api_key: "${DEEPSEEK_API_KEY}"
+  #     model_name: "deepseek-v3.2"  # Options: deepseek-v3.2, deepseek-r1
+  #     api_endpoint: "https://api.deepseek.com/v1"
+
+  # Qwen (3 Coder, 3.5)
+  # Priority: MEDIUM | Status: Planned
+  # SWE-Bench Leader (76.4%) | Cost: TBD
+  # qwen:
+  #   enabled: false
+  #   class: QwenCodex
+  #   config:
+  #     api_key: "${ALIBABA_API_KEY}"
+  #     model_name: "qwen-3.5"  # Options: qwen-3-coder, qwen-3.5
+  #     region: "us-west-1"  # Alibaba Cloud region
+
+  # Aider (CLI Tool - wraps other models)
+  # Priority: MEDIUM | Status: Planned
+  # Supports: 75+ models | Free tier: N/A (uses backend model)
+  # aider:
+  #   enabled: false
+  #   class: AiderCodex
+  #   config:
+  #     backend_model: "claude-opus"  # Or gpt-4o, deepseek, etc.
+  #     api_key: "${AIDER_API_KEY}"  # For the backend model
+  #     aider_path: "aider"  # Path to aider executable
+
+  # Cline (CLI mode)
+  # Priority: MEDIUM | Status: Planned
+  # 4M+ installations | Supports: Claude, GPT, etc.
+  # cline:
+  #   enabled: false
+  #   class: ClineCodex
+  #   config:
+  #     backend_model: "claude-opus"
+  #     api_key: "${CLINE_API_KEY}"
+  #     cline_path: "cline"
+
+  # Grok 3 (xAI)
+  # Priority: MEDIUM | Status: Planned
+  # SWE-Bench: 79.4% | Open weight
+  # grok:
+  #   enabled: false
+  #   class: GrokCodex
+  #   config:
+  #     api_key: "${XAI_API_KEY}"
+  #     model_name: "grok-3"
+  #     api_endpoint: "https://api.x.ai/v1"
+
+  # Ollama (Self-hosted models)
+  # Priority: LOW | Status: Planned
+  # Supports: Llama, Mistral, CodeLlama, etc.
+  # ollama:
+  #   enabled: false
+  #   class: OllamaCodex
+  #   config:
+  #     model_name: "llama4:405b"  # Or mistral-large, codellama, etc.
+  #     api_endpoint: "http://localhost:11434"  # Local Ollama server
+
+  # Goose (Agentic CLI)
+  # Priority: LOW | Status: Planned
+  # Features: Autonomous, MCP support
+  # goose:
+  #   enabled: false
+  #   class: GooseCodex
+  #   config:
+  #     backend_model: "claude-opus"
+  #     api_key: "${GOOSE_API_KEY}"
+  #     goose_path: "goose"
+
+  # =========================================================================
+  # Additional Models (Lower Priority)
+  # =========================================================================
+
+  # GLM-4.7 Thinking (Zhipu AI) - LiveCodeBench leader (89%)
+  # Mistral Large 3 - 675B open-weight
+  # Llama 4 Maverick - 400B open-source
+  # Devstral 2 - Code-focused 123B
+  # See ROADMAP.md for complete list
 
 # Default codex to use when --codex flag is not specified
 default: claude

@@ -4,21 +4,38 @@ A quantitative benchmark comparing how efficiently various AI coding assistants 
 
 **Originally** a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) benchmark, now supports multiple AI codexes including **Google Gemini**.
 
-> **Quick Start**: See [QUICK_START.md](./QUICK_START.md) for setup instructions.
+> **📚 Navigation**: [INDEX.md](./INDEX.md) | **⚡ Quick Start**: [QUICK_START.md](./QUICK_START.md) | **🗺️ Roadmap**: [ROADMAP.md](./ROADMAP.md)
 
 For the original Claude Code benchmark discussion, see: [Which Programming Language Is Best for Claude Code?](https://dev.to/mame/which-programming-language-is-best-for-claude-code-508a) / [日本語版](https://zenn.dev/mametter/articles/3e8580ec034201)
 
 ## TL;DR
 
-At least for prototyping-scale tasks, Ruby, Python, and JavaScript (not TypeScript) appear to be the best fit for Claude Code — fastest, cheapest, and most stable.
+**Original Claude Code Results**: At least for prototyping-scale tasks, Ruby, Python, and JavaScript (not TypeScript) appear to be the best fit for Claude Code — fastest, cheapest, and most stable.
+
+**Multi-Codex Status**: Now supports multiple AI coding assistants. Compare Claude, Gemini, and more across the same tasks and languages. See [ROADMAP.md](./ROADMAP.md) for planned integrations.
 
 ## Motivation
 
 "Static typing prevents AI hallucination bugs!" vs. "Dynamic typing saves tokens!" — qualitative arguments abound, but quantitative data is scarce. This experiment aims to fill that gap.
 
+## Supported AI Codexes
+
+| Codex | Provider | Status | Integration | Notes |
+|-------|----------|--------|-------------|-------|
+| **Claude Code** | Anthropic | ✅ Supported | CLI | Default, Opus/Sonnet models |
+| **Gemini** | Google | ✅ Supported | API | Flash-Lite/Pro, 1M context, free tier |
+| **OpenAI** | OpenAI | 🚧 Planned | API | GPT-4o, o3, o4-mini |
+| **DeepSeek** | DeepSeek | 🚧 Planned | API | V3.2, R1, cheapest at $0.27/1M |
+| **Qwen** | Alibaba | 🚧 Planned | API | 3.5 Coder, SWE-Bench leader |
+| **Aider** | Open Source | 🚧 Planned | CLI | 75+ model support |
+| **Cline** | Open Source | 🚧 Planned | CLI | 4M+ installations |
+| **Others** | Various | 📋 Roadmap | - | See [ROADMAP.md](./ROADMAP.md) for 20+ more |
+
+**See [ROADMAP.md](./ROADMAP.md)** for the complete list of planned integrations including Grok, Llama, Mistral, and specialized tools.
+
 ## Experiment
 
-We asked Claude Code (Opus 4.6) to implement a **mini-git** — a simplified version of Git — in various programming languages, and measured the time, cost, and lines of code for each.
+We ask AI coding assistants (originally Claude Code Opus 4.6, now supporting multiple codexes) to implement a **mini-git** — a simplified version of Git — in various programming languages, and measure the time, cost, and lines of code for each.
 
 The task is split into two phases:
 
@@ -168,10 +185,40 @@ ruby benchmark.rb --codex gemini --lang python
 
 Adding new codexes is straightforward — create an adapter in `lib/codexes/` implementing the `BaseCodex` interface.
 
+See **[CODEX_COMPARISON.md](./CODEX_COMPARISON.md)** for detailed comparison of different AI coding assistants.
+
 ### Repository Structure
 
+```
+.
+├── benchmark.rb              # Main benchmark runner
+├── report.rb                 # Report generator
+├── plot.py                   # Graph generator
+├── SPEC-v1.txt              # MiniGit v1 specification
+├── SPEC-v2.txt              # MiniGit v2 specification
+├── test-v1.sh               # v1 test suite
+├── test-v2.sh               # v2 test suite
+├── lib/
+│   ├── codexes/
+│   │   ├── base_codex.rb    # Abstract base class
+│   │   ├── claude_codex.rb  # Claude Code adapter
+│   │   └── gemini_codex.rb  # Gemini adapter
+│   └── codex_loader.rb      # Configuration loader
+├── config/
+│   └── codexes.yml          # Codex configuration
+├── results/
+│   ├── results.json         # Raw benchmark data
+│   ├── meta.json            # Metadata
+│   └── report.md            # Generated report
+├── figures/                 # Generated graphs
+├── QUICK_START.md          # Quick start guide
+├── ROADMAP.md              # Multi-codex roadmap
+└── CODEX_COMPARISON.md     # Detailed codex comparison
+```
+
+**Branches:**
 - **`main` branch**: Benchmark tools, specs, tests, results, and figures
-- **`data` branch** (orphan): Generated source code and Claude JSON logs for verification
+- **`data` branch** (orphan): Generated source code and logs for verification
 
 ## Summary
 

@@ -94,7 +94,45 @@ To add a language, add an entry to the `LANGUAGES` hash. Tests just call `./mini
 - No external libraries allowed, stdlib only
 - Exact string matching required (determinism rules)
 
+## Multi-Codex Expansion
+
+This benchmark originally targeted Claude Code, but has been refactored to support multiple AI coding assistants:
+
+### Current Support
+- ✅ **Claude Code** (Anthropic) - Original implementation
+- ✅ **Gemini** (Google) - API integration with Flash-Lite/Pro
+
+### Planned Integrations
+See **[ROADMAP.md](./ROADMAP.md)** for the complete list of 20+ planned codexes including:
+- 🔴 **High Priority**: OpenAI (GPT-4o, o3), DeepSeek (V3.2, R1)
+- 🟡 **Medium Priority**: Qwen (3.5 Coder), Aider, Cline, Grok 3
+- 🟢 **Future**: Llama 4, Mistral, GLM-4.7, self-hosted models
+
+### Architecture Benefits
+- **Unified Interface**: All codexes use the same `BaseCodex` API
+- **Easy Comparison**: Run the same task across multiple codexes
+- **Extensible**: Add new codexes by creating a single adapter file
+- **Language-Agnostic**: Test codex performance across 15 programming languages
+
+### Research Questions
+1. Which codex is **fastest** for different languages?
+2. Which is most **cost-effective**?
+3. Do **specialized models** (e.g., Qwen Coder) outperform general ones?
+4. How do **open source** models compare to proprietary ones?
+5. What's the overhead of **CLI tools** (Aider, Cline) vs direct API?
+
+See **[CODEX_COMPARISON.md](./CODEX_COMPARISON.md)** for detailed technical comparison.
+
+## Contributing
+
+We welcome contributions of:
+- **New codex adapters** (implement `BaseCodex` interface)
+- **Benchmark results** (run existing codexes, submit data)
+- **Analysis scripts** (improve reporting/visualization)
+- **Language additions** (add new programming languages)
+
 ## Notes
 
 - This is not a git repository for MiniGit itself; individual implementations under `generated/` may use `git init` as part of their build process
 - The `data` branch is an orphan branch with no common history with `main`
+- Originally focused on Claude Code, now a **multi-codex benchmark platform**
