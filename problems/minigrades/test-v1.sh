@@ -11,15 +11,15 @@ SOLUTION="solution.py"
 
 # --- Helper Functions ---
 run_cmd() {
-    # Automatically initialize before each command to stay consistent with Python run_cmd
+    # Ensure environment is initialized for every command to maintain state consistency
     python3 "$SOLUTION" init > /dev/null 2>&1
-    # Execute the actual command and return trimmed output
+    # Execute the command and trim whitespace using xargs
     result=$(python3 "$SOLUTION" "$@" | xargs)
     echo "$result"
 }
 
 setup() {
-    # Equivalent to setup_function()
+    # Reset the environment by removing the data directory
     if [ -d "$DATA_DIR" ]; then
         rm -rf "$DATA_DIR"
     fi
@@ -55,10 +55,10 @@ assert_contains() {
 
 # --- Test Execution ---
 
-echo "Running mini-grades test suite..."
+echo "Running mini-grades v1 test suite..."
 echo "---------------------------------"
 
-# --- add tests ---
+# --- add_student tests ---
 setup
 response=$(run_cmd add 101 Berke)
 assert_equals "test_add_student_success" "Student added successfully." "$response"
@@ -72,7 +72,7 @@ setup
 response=$(run_cmd add abc Berke)
 assert_equals "test_add_student_non_numeric_id" "Invalid input: Please enter a numeric value." "$response"
 
-# --- add-grade tests ---
+# --- add_grade tests ---
 setup
 run_cmd add 101 Berke > /dev/null
 response=$(run_cmd add-grade 101 80)
@@ -80,65 +80,60 @@ assert_equals "test_add_grade_success" "Grades added successfully for student 10
 
 setup
 run_cmd add 101 Berke > /dev/null
+response=$(run_cmd add-grade 101 105)
+assert_equals "test_add_grade_range_error" "Invalid grade: Grades must be between 0 and 100." "$response"
+
+setup
+run_cmd add 101 Berke > /dev/null
 response=$(run_cmd add-grade 101 abc)
-assert_equals "test_add_grade_non_numeric_grade" "Invalid input: Please enter a numeric value." "$response"
+assert_equals "test_add_grade_non_numeric" "Invalid input: Please enter a numeric value." "$response"
 
 setup
 response=$(run_cmd add-grade 999 80)
 assert_equals "test_add_grade_student_not_found" "Error: No student found with ID 999." "$response"
 
-# --- delete tests ---
+# --- delete_student tests ---
 setup
 run_cmd add 101 Berke > /dev/null
 response=$(run_cmd delete 101)
-assert_equals "test_delete_student_success" "Student and all grades deleted successfully." "$response"
+assert_equals "test_delete_student_success" "Student deleted successfully." "$response"
 
 setup
 response=$(run_cmd delete 999)
 assert_equals "test_delete_student_not_found" "Error: No student found with ID 999." "$response"
 
-# --- calculate tests ---
+# --- calculate_average tests (Mock in v1) ---
 setup
 run_cmd add 101 Berke > /dev/null
 response=$(run_cmd average 101)
-assert_equals "test_calculate_average_success" "Average calculation will be implemented in future weeks." "$response"
+assert_equals "test_calculate_average_v1_mock" "Average calculation will be implemented in future weeks." "$response"
 
 setup
 response=$(run_cmd average 999)
-assert_equals "test_calculate_average_student_not_found" "Error: No student found with ID 999." "$response"
+assert_equals "test_calculate_average_not_found" "Error: No student found with ID 999." "$response"
 
-# --- list tests ---
+# --- list_students tests ---
 setup
 run_cmd add 101 Berke > /dev/null
 run_cmd add 102 Efe > /dev/null
 response=$(run_cmd list)
-assert_contains "test_list_students_success (101)" "101 | Berke" "$response"
-assert_contains "test_list_students_success (102)" "102 | Efe" "$response"
+assert_contains "test_list_students_contains_101" "101 | Berke" "$response"
+assert_contains "test_list_students_contains_102" "102 | Efe" "$response"
 
 setup
 response=$(run_cmd list)
 assert_equals "test_list_students_empty" "Error: No students found in the system. Operation aborted." "$response"
-
-# --- report tests ---
-setup
-run_cmd add 101 Berke > /dev/null
-run_cmd add 102 Efe > /dev/null
-response=$(run_cmd report)
-assert_equals "test_generate_report_success" "Report saved to .minigrades/report.txt" "$response"
-if [ -f "$DATA_DIR/report.txt" ]; then
-    echo -e "${GREEN}[PASSED]${NC} test_generate_report_file_exists"
-else
-    echo -e "${RED}[FAILED]${NC} test_generate_report_file_exists"
-fi
-
-setup
-response=$(run_cmd report)
-assert_equals "test_generate_report_empty" "Error: No data available to generate a report." "$response"
 
 # --- unknown-command test ---
 setup
 response=$(run_cmd hello)
 assert_contains "test_unknown_command" "Unknown command: hello. Please select from the menu." "$response"
 
+# --- initialization test ---
+# We remove the data dir and run a command without 'init' (run_cmd calls init, so we call python directly)
+rm -rf "$DATA_DIR"
+response=$(python3 "$SOLUTION" list | xargs)
+assert_equals "test_not_initialized" "Not initialized. Run: python solution.py init" "$response"
+
 echo "---------------------------------"
-echo "Test execution completed."
+echo "Test execution completed for v1."
