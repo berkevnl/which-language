@@ -1,0 +1,10 @@
+{
+  "name": "MiniQuiz",
+  "binary_name": "miniquiz",
+  "v1_spec": "SPEC-v1.txt",
+  "v1_test": "test-v1.sh",
+  "v1_prompt": "Implement {{binary_name}} as described in SPEC-v1.txt using {{language}}. The script must be named '{{binary_name}}.py' and runnable as python {{binary_name}}.py. Implement the init and add commands fully. For list, print raw file contents. The ask and delete commands should print 'Command will be implemented in future weeks.' Verify your implementation passes all tests by running: bash test-v1.sh",
+  "v2_spec": "SPEC-v2.txt",
+  "v2_test": "test-v2.sh",
+  "v2_prompt": "Read SPEC-v2.txt and extend the existing {{binary_name}}.py implementation with fully working ask and delete commands. Update the list command to print formatted output: [id] question -> answer (date). Fix ID calculation to use max(existing_ids)+1. Use datetime.date.today() for dates. Verify your implementation passes all tests by running: bash test-v2.sh"
+}
